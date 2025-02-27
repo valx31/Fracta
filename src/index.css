@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Satoshi", sans-serif;
+}
+
+@layer utilities {
+  .regular-31 {
+    @apply font-normal text-[31px];
+  }
+
+  .regular-24 {
+    @apply font-normal text-[24px];
+  }
+
+  .regular-18 {
+    @apply font-normal text-[18px];
+  }
+
+  .regular-16 {
+    @apply font-normal text-[16px];
+  }
+
+  .regular-14 {
+    @apply font-normal text-[14px];
+  }
+
+  .semibold-24 {
+    @apply font-semibold text-[24px];
+  }
+
+  .semibold-18 {
+    @apply font-semibold text-[18px];
+  }
+
+  .bold-16 {
+    @apply font-bold text-[16px];
+  }
+}
+
+/* Hide the message by default */
+#non-mobile-message {
+  display: none;
+}
+
+/* Show the message and block interaction on screens wider than 500px */
+@media (min-width: 501px) {
+  #non-mobile-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    z-index: 1000;
+  }
+
+  /* Prevent scrolling and interaction */
+  body {
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Allow interaction with the message */
+  #non-mobile-message {
+    pointer-events: auto;
+  }
+}
