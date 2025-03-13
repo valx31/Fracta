@@ -51,7 +51,7 @@ export default function HomePage() {
                 <ArrowTrendingUpIcon className="w-6 h-6 text-secondary" />
               }
             >
-              <p className="regular-16 text-secondary">Acctiones</p>
+              <p className="regular-16 text-secondary">Acciones</p>
             </Button>
           </div>
         </main>

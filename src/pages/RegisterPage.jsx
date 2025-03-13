@@ -1,14 +1,16 @@
 import MainLayout from "../Layout/MainLayout";
 import { Input, Button } from "@heroui/react";
-import { NavLink } from "react-router";
+import { useNavigate } from "react-router";
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
+
   return (
     <MainLayout>
       <section className="flex flex-col gap-y-5 mb-10">
         <h1 className="regular-31 mb-4">Regístrate</h1>
         <div className="flex flex-col gap-y-5 mb-7">
-        <Input
+          <Input
             variant="bordered"
             label="Nombres"
             labelPlacement="outside"
@@ -16,7 +18,7 @@ export default function RegisterPage() {
             type="text"
             isRequired
           />
-        <Input
+          <Input
             variant="bordered"
             label="Apellidos"
             labelPlacement="outside"
@@ -41,11 +43,15 @@ export default function RegisterPage() {
             isRequired
           />
         </div>
-        <NavLink to="/home" className="w-full">
-          <Button color="primary" radius="full" className="semibold-18 py-6 w-full">
-            Registrarse
-          </Button>
-        </NavLink>
+
+        <Button
+          color="primary"
+          radius="full"
+          className="semibold-18 py-6 w-full"
+          onPress={() => navigate("/home")}
+        >
+          Registrarse
+        </Button>
       </section>
 
       <div className="flex items-center gap-x-5 mb-6">
@@ -69,14 +75,14 @@ export default function RegisterPage() {
       </div>
 
       <div className="grid place-items-center">
-        <p className="regular-16">
+        <p className="regular-16 flex items-center gap-x-2">
           ¿Ya tienes cuenta?{" "}
-          <NavLink
-            to="/login"
-            className="semibold-16 underline text-primary"
+          <p
+            onClick={() => navigate("/login")}
+            className="semibold-16 underline text-primary cursor-pointer"
           >
-            Incia sesión
-          </NavLink>
+            Inicia sesión
+          </p>
         </p>
       </div>
     </MainLayout>
