@@ -32,7 +32,7 @@ export default function HomePage() {
                 <ArrowRightStartOnRectangleIcon className="w-6 h-6 text-primary" />
               }
             >
-              <p className="regular-16 text-primary">Ver reporte</p>
+              <p className="regular-16 text-primary">Depositar</p>
             </Button>
             <Button
               className="bg-primary rounded-full w-full py-7"
@@ -40,7 +40,7 @@ export default function HomePage() {
                 <ArrowLeftStartOnRectangleIcon className="w-6 h-6 text-secondary" />
               }
             >
-              <p className="regular-16 text-secondary">Ver reporte</p>
+              <p className="regular-16 text-secondary">Retirar</p>
             </Button>
           </div>
           <div className="bg-background rounded-3xl flex flex-col gap-4 justify-center items-center w-full p-5">
