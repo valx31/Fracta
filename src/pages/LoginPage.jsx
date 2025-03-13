@@ -1,8 +1,10 @@
 import MainLayout from "../Layout/MainLayout";
 import { Input, Button } from "@heroui/react";
-import { NavLink } from "react-router";
+import { useNavigate } from "react-router";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
   return (
     <MainLayout>
       <figure className="grid place-items-center mb-10">
@@ -28,11 +30,11 @@ export default function LoginPage() {
             isRequired
           />
         </div>
-        <NavLink to="/home" className="w-full">
-          <Button color="primary" radius="full" className="semibold-18 py-6 w-full">
+
+          <Button color="primary" radius="full" className="semibold-18 py-6 w-full" onPress={() => navigate("/home")}>
             Iniciar sesión
           </Button>
-        </NavLink>
+
       </section>
 
       <div className="flex items-center gap-x-5 mb-6">
@@ -56,14 +58,14 @@ export default function LoginPage() {
       </div>
 
       <div className="grid place-items-center">
-        <p className="regular-16">
+        <p className="regular-16 flex items-center gap-x-2">
           ¿No tienes una cuenta?{" "}
-          <NavLink
-            to="/register"
-            className="semibold-16 underline text-primary"
+          <p
+            onClick={() => navigate("/register")}
+            className="semibold-16 underline text-primary cursor-pointer"
           >
             Registrarse
-          </NavLink>
+          </p>
         </p>
       </div>
     </MainLayout>
