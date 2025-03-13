@@ -10,7 +10,7 @@ export default function CardActivityRecent() {
       </div>
       <div>
         <p className="bold-16">-$100.000</p>
-        <p className="regular-14 text-textSecondary">Trasnferencia</p>
+        <p className="regular-14 text-textSecondary">Transferencia</p>
       </div>
     </div>
   );
