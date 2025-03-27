@@ -7,7 +7,7 @@ import {
   ArrowTrendingUpIcon,
 } from "@heroicons/react/24/outline";
 import CardActivityRecent from "../components/CardActivityRecent";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export default function HomePage() {
   const navigate = useNavigate();

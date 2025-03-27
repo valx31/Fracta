@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import MainLayout from '../Layout/MainLayout';
-import Header from '../components/Header';
+import { Input } from "@heroui/react";
+import { MagnifyingGlassIcon, ArrowUpIcon, ArrowDownIcon, MinusIcon } from "@heroicons/react/24/outline";
 
 export default function Emitters() {
   const [emitters, setEmitters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchEmitters = async () => {
@@ -27,54 +29,103 @@ export default function Emitters() {
     fetchEmitters();
   }, []);
 
+  const filteredEmitters = emitters.filter(emitter => {
+    const searchLower = searchQuery.toLowerCase();
+    const nombreEmpresa = emitter.nombre_empresa?.toLowerCase() || '';
+    const nemotecnico = emitter.nemotecnico?.toLowerCase() || '';
+    return nombreEmpresa.includes(searchLower) || nemotecnico.includes(searchLower);
+  });
+
+  const calculatePriceChange = (precioActual) => {
+    if (!precioActual || precioActual.length < 2) return null;
+    
+    const lastPrice = precioActual[precioActual.length - 1];
+    const previousPrice = precioActual[precioActual.length - 2];
+    
+    if (!lastPrice?.precio || !previousPrice?.precio) return null;
+    
+    const change = lastPrice.precio - previousPrice.precio;
+    const percentage = (change / previousPrice.precio) * 100;
+    
+    return {
+      change,
+      percentage,
+      isPositive: change > 0,
+      isNegative: change < 0,
+      isNeutral: change === 0
+    };
+  };
+
   return (
     <MainLayout>
-      <Header />
-      <main className="flex flex-col gap-8 p-6">
-        <h1 className="text-2xl font-bold text-white">Acciones Disponibles</h1>
+      <main className="flex flex-col gap-6">
+        <h1 className="text-2xl font-bold">Acciones Disponibles</h1>
+        
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Buscar por nombre..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-background rounded-xl"
+            startContent={
+              <MagnifyingGlassIcon className="w-5 h-5 text-textSecondary" />
+            }
+          />
+        </div>
         
         {loading ? (
           <div className="text-white">Cargando...</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-background rounded-lg">
-              <thead>
-                <tr className="text-left border-b border-gray-700">
-                  <th className="p-4 text-white">Empresa</th>
-                  <th className="p-4 text-white">Nemo</th>
-                  <th className="p-4 text-white">Descripción</th>
-                  <th className="p-4 text-white">Precio</th>
-                  <th className="p-4 text-white">Dividendos</th>
-                  <th className="p-4 text-white">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {emitters.map((emitter) => {
-                  const lastPrice = emitter.precio_actual[emitter.precio_actual.length - 1];
-                  return (
-                    <tr key={emitter.id} className="border-b border-gray-700">
-                      <td className="p-4">
-                        <div className="flex items-center gap-3">
-                          {emitter.imagen && (
-                            <img 
-                              src={emitter.imagen} 
-                              alt={emitter.nombre_empresa}
-                              className="w-10 h-10 rounded-full object-cover"
-                            />
+          <div className="grid grid-cols-1 gap-4">
+            {filteredEmitters.map((emitter) => {
+              const lastPrice = emitter.precio_actual?.[emitter.precio_actual.length - 1];
+              const priceChange = calculatePriceChange(emitter.precio_actual);
+              
+              return (
+                <div 
+                  key={emitter.id} 
+                  className="bg-background rounded-xl p-4 flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    {emitter.imagen && (
+                      <img 
+                        src={emitter.imagen} 
+                        alt={emitter.nombre_empresa || 'Company'}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    )}
+                    <div>
+                      <h3 className="text-white font-semibold text-sm">{emitter.nombre_empresa || 'Sin nombre'}</h3>
+                      <p className="text-textSecondary text-xs">{emitter.nemotecnico || 'Sin símbolo'}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex flex-col items-center gap-1 justify-end">
+                      <p className="text-white font-bold text-sm">${lastPrice?.precio || '0.00'}</p>
+                      {priceChange && (
+                        <div className={`flex items-center gap-1 ${
+                          priceChange.isPositive ? 'text-green-500' : 
+                          priceChange.isNegative ? 'text-red-500' : 
+                          'text-textSecondary'
+                        }`}>
+                          {priceChange.isPositive ? (
+                            <ArrowUpIcon className="w-4 h-4" />
+                          ) : priceChange.isNegative ? (
+                            <ArrowDownIcon className="w-4 h-4" />
+                          ) : (
+                            <MinusIcon className="w-4 h-4" />
                           )}
-                          <span className="text-white">{emitter.nombre_empresa}</span>
+                          <span className="text-xs font-semibold">
+                            {priceChange.isNeutral ? '0.00' : `${Math.abs(priceChange.percentage).toFixed(2)}%`}
+                          </span>
                         </div>
-                      </td>
-                      <td className="p-4 text-white">{emitter.nemotecnico}</td>
-                      <td className="p-4 text-white">{emitter.descripcion}</td>
-                      <td className="p-4 text-white">${lastPrice.precio}</td>
-                      <td className="p-4 text-white">${emitter.dividendos_por_accion}</td>
-                      <td className="p-4 text-white">{emitter.acciones_en_circulacion.toLocaleString()}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </main>
