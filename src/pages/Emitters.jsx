@@ -56,6 +56,14 @@ export default function Emitters() {
     };
   };
 
+  const formatPrice = (price) => {
+    if (!price) return '0.00';
+    return price.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
+
   return (
     <MainLayout>
       <main className="flex flex-col gap-6">
@@ -102,7 +110,7 @@ export default function Emitters() {
                   </div>
                   <div className="text-right">
                     <div className="flex flex-col items-center gap-1 justify-end">
-                      <p className="text-white font-bold text-sm">${lastPrice?.precio || '0.00'}</p>
+                      <p className="text-white font-bold text-sm">${formatPrice(lastPrice?.precio)}</p>
                       {priceChange && (
                         <div className={`flex items-center gap-1 ${
                           priceChange.isPositive ? 'text-green-500' : 
