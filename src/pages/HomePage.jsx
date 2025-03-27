@@ -7,8 +7,11 @@ import {
   ArrowTrendingUpIcon,
 } from "@heroicons/react/24/outline";
 import CardActivityRecent from "../components/CardActivityRecent";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
     <>
       <MainLayout>
@@ -50,6 +53,7 @@ export default function HomePage() {
               startContent={
                 <ArrowTrendingUpIcon className="w-6 h-6 text-secondary" />
               }
+              onClick={() => navigate('/emitters')}
             >
               <p className="regular-16 text-secondary">Acciones</p>
             </Button>

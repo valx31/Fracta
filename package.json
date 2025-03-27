@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "^2.7.2",
+    "firebase": "^11.5.0",
     "fracta_fintech": "file:",
     "framer-motion": "^12.4.7",
     "react": "^19.0.0",
