@@ -100,7 +100,7 @@ export default function Emitters() {
                       <img 
                         src={emitter.imagen} 
                         alt={emitter.nombre_empresa || 'Company'}
-                        className="w-12 h-12 rounded-full object-cover"
+                        className="w-8 h-8 rounded-full object-cover"
                       />
                     )}
                     <div>
