@@ -211,7 +211,7 @@ export default function EmitterDetail() {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={chartData}
-              margin={{ top: 10, right: 10, left: 5, bottom: 20 }}
+              margin={{ top: 10, right: 10, left: 5, bottom: 0 }}
             >
               <CartesianGrid 
                 strokeDasharray="3 3" 
