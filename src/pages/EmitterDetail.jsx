@@ -42,10 +42,11 @@ export default function EmitterDetail() {
 
   const formatPrice = (price) => {
     if (!price) return '0,00';
-    return price.toLocaleString('es-ES', {
+    return new Intl.NumberFormat('es-CO', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+      maximumFractionDigits: 2,
+      useGrouping: true
+    }).format(price);
   };
 
   const calculatePriceChange = () => {
