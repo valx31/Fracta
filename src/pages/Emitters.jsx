@@ -4,11 +4,13 @@ import { db } from '../firebase/config';
 import MainLayout from '../Layout/MainLayout';
 import { Input } from "@heroui/react";
 import { MagnifyingGlassIcon, ArrowUpIcon, ArrowDownIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from 'react-router';
 
 export default function Emitters() {
   const [emitters, setEmitters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmitters = async () => {
@@ -67,7 +69,7 @@ export default function Emitters() {
   return (
     <MainLayout>
       <main className="flex flex-col gap-6">
-        <h1 className="text-2xl font-bold">Acciones Disponibles</h1>
+        <h1 className="text-2xl font-bold text-white">Acciones Disponibles</h1>
         
         <div className="relative">
           <Input
@@ -93,14 +95,15 @@ export default function Emitters() {
               return (
                 <div 
                   key={emitter.id} 
-                  className="bg-background rounded-xl p-4 flex items-center justify-between"
+                  className="bg-background rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-opacity-80 transition-all"
+                  onClick={() => navigate(`/emitter/${emitter.id}`)}
                 >
                   <div className="flex items-center gap-3">
                     {emitter.imagen && (
                       <img 
                         src={emitter.imagen} 
                         alt={emitter.nombre_empresa || 'Company'}
-                        className="w-8 h-8 rounded-full object-cover"
+                        className="w-12 h-12 rounded-full object-cover"
                       />
                     )}
                     <div>
@@ -109,7 +112,7 @@ export default function Emitters() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="flex flex-col items-center gap-1 justify-end">
+                    <div className="flex flex-col items-end gap-1">
                       <p className="text-white font-bold text-sm">${formatPrice(lastPrice?.precio)}</p>
                       {priceChange && (
                         <div className={`flex items-center gap-1 ${

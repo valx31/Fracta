@@ -4,6 +4,7 @@ import RegisterPage from "./pages/RegisterPage";
 import SplashScreen from "./components/SplashScreen";
 import HomePage from "./pages/HomePage";
 import Emitters from "./pages/Emitters";
+import EmitterDetail from "./pages/EmitterDetail";
 
 export default function AppRouter() {
   return (
@@ -13,6 +14,7 @@ export default function AppRouter() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/emitters" element={<Emitters />} />
+        <Route path="/emitter/:id" element={<EmitterDetail />} />
     </Routes>
   )
 }
