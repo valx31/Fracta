@@ -17,9 +17,9 @@ export default function EmitterDetail() {
   const [selectedTimeframe, setSelectedTimeframe] = useState('1h');
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [selectedQuantity, setSelectedQuantity] = useState('1');
+  const [selectedQuantity, setSelectedQuantity] = useState(new Set(["1"]));
   const [customQuantity, setCustomQuantity] = useState('');
-  const [selectedFraction, setSelectedFraction] = useState('1');
+  const [selectedFraction, setSelectedFraction] = useState(new Set(["1"]));
   const [showCustomInput, setShowCustomInput] = useState(false);
 
   useEffect(() => {
@@ -110,18 +110,18 @@ export default function EmitterDetail() {
   const padding = priceRange * 0.1; // 10% padding
 
   const handleQuantityChange = (value) => {
-    if (value === 'otro') {
+    const selectedValue = Array.from(value)[0];
+    setSelectedQuantity(value);
+    if (selectedValue === 'otro') {
       setShowCustomInput(true);
-      setSelectedQuantity('');
     } else {
       setShowCustomInput(false);
-      setSelectedQuantity(value);
     }
   };
 
   const calculateTotalPrice = () => {
-    const quantity = showCustomInput ? parseInt(customQuantity) || 0 : parseInt(selectedQuantity);
-    const fraction = parseFloat(selectedFraction);
+    const quantity = showCustomInput ? parseInt(customQuantity) || 0 : parseInt(Array.from(selectedQuantity)[0]);
+    const fraction = parseFloat(Array.from(selectedFraction)[0]);
     const price = lastPrice?.precio || 0;
     const total = quantity * fraction * price;
     return formatPrice(total);
@@ -131,6 +131,22 @@ export default function EmitterDetail() {
     setIsPurchaseModalOpen(false);
     setIsSuccessModalOpen(true);
   };
+
+  const quantityOptions = [
+    { id: "1", label: "1 acción" },
+    { id: "2", label: "2 acciones" },
+    { id: "3", label: "3 acciones" },
+    { id: "4", label: "4 acciones" },
+    { id: "5", label: "5 acciones" },
+    { id: "6", label: "6 acciones" },
+    { id: "otro", label: "Otro" }
+  ];
+
+  const fractionOptions = [
+    { id: "1", label: "Acción completa" },
+    { id: "0.5", label: "1/2 Acción" },
+    { id: "0.25", label: "1/4 Acción" }
+  ];
 
   return (
     <MainLayout>
@@ -278,17 +294,16 @@ export default function EmitterDetail() {
               <div className="flex flex-col gap-4">
                 <Select
                   label="Cantidad de acciones"
-                  selectedKeys={[selectedQuantity]}
-                  onChange={(e) => handleQuantityChange(e.target.value)}
+                  placeholder="Selecciona la cantidad"
+                  selectedKeys={selectedQuantity}
+                  onSelectionChange={handleQuantityChange}
+                  className="w-full"
                 >
-                  {[1, 2, 3, 4, 5, 6].map((num) => (
-                    <SelectItem key={num.toString()} value={num.toString()}>
-                      {num} acción{num !== 1 ? 'es' : ''}
+                  {quantityOptions.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.label}
                     </SelectItem>
                   ))}
-                  <SelectItem key="otro" value="otro">
-                    Otro
-                  </SelectItem>
                 </Select>
 
                 {showCustomInput && (
@@ -298,24 +313,23 @@ export default function EmitterDetail() {
                     value={customQuantity}
                     onChange={(e) => setCustomQuantity(e.target.value)}
                     min="1"
+                    placeholder="Ingresa la cantidad"
+                    className="w-full"
                   />
                 )}
 
                 <Select
                   label="Fracción de acción"
-                  selectedKeys={[selectedFraction]}
-                  value={selectedFraction}
-                  onChange={(e) => setSelectedFraction(e.target.value)}
+                  placeholder="Selecciona la fracción"
+                  selectedKeys={selectedFraction}
+                  onSelectionChange={setSelectedFraction}
+                  className="w-full"
                 >
-                  <SelectItem key="1" value="1">
-                    Acción completa
-                  </SelectItem>
-                  <SelectItem key="0.5" value="0.5">
-                    1/2 Acción
-                  </SelectItem>
-                  <SelectItem key="0.25" value="0.25">
-                    1/4 Acción
-                  </SelectItem>
+                  {fractionOptions.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
                 </Select>
 
                 <div className="bg-background p-4 rounded-xl">
