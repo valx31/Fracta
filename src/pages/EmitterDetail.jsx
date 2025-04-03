@@ -7,6 +7,7 @@ import { Button } from '@heroui/react';
 import { ArrowLeftIcon, StarIcon, ArrowTrendingUpIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem, Input } from '@heroui/react';
 
 export default function EmitterDetail() {
   const { id } = useParams();
@@ -15,6 +16,12 @@ export default function EmitterDetail() {
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedTimeframe, setSelectedTimeframe] = useState('1h');
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [selectedQuantity, setSelectedQuantity] = useState('1');
+  const [customQuantity, setCustomQuantity] = useState('');
+  const [selectedFraction, setSelectedFraction] = useState('1');
+  const [showCustomInput, setShowCustomInput] = useState(false);
 
   useEffect(() => {
     const fetchEmitter = async () => {
@@ -97,6 +104,28 @@ export default function EmitterDetail() {
   const maxPrice = Math.max(...prices);
   const priceRange = maxPrice - minPrice;
   const padding = priceRange * 0.1; // 10% padding
+
+  const handleQuantityChange = (value) => {
+    if (value === 'otro') {
+      setShowCustomInput(true);
+      setSelectedQuantity('');
+    } else {
+      setShowCustomInput(false);
+      setSelectedQuantity(value);
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    const quantity = showCustomInput ? parseInt(customQuantity) || 0 : parseInt(selectedQuantity);
+    const fraction = parseFloat(selectedFraction);
+    const price = lastPrice?.precio || 0;
+    return (quantity * fraction * price).toFixed(2);
+  };
+
+  const handlePurchase = () => {
+    setIsPurchaseModalOpen(false);
+    setIsSuccessModalOpen(true);
+  };
 
   return (
     <MainLayout>
@@ -221,9 +250,118 @@ export default function EmitterDetail() {
           size="lg"
           className="w-full py-6 rounded-xl"
           startContent={<ArrowTrendingUpIcon className="w-5 h-5" />}
+          onPress={() => setIsPurchaseModalOpen(true)}
         >
           Quiero ser accionista
         </Button>
+
+        {/* Purchase Modal */}
+        <Modal 
+          isOpen={isPurchaseModalOpen} 
+          onClose={() => setIsPurchaseModalOpen(false)}
+          placement="bottom"
+        >
+          <ModalContent>
+            <ModalHeader className="flex flex-col gap-1">
+              Comprar acciones de {emitter?.nombre_empresa}
+            </ModalHeader>
+            <ModalBody>
+              <div className="flex flex-col gap-4">
+                <Select
+                  label="Cantidad de acciones"
+                  selectedKeys={[selectedQuantity]}
+                  onChange={(e) => handleQuantityChange(e.target.value)}
+                >
+                  {[1, 2, 3, 4, 5, 6].map((num) => (
+                    <SelectItem key={num.toString()} value={num.toString()}>
+                      {num} acción{num !== 1 ? 'es' : ''}
+                    </SelectItem>
+                  ))}
+                  <SelectItem key="otro" value="otro">
+                    Otro
+                  </SelectItem>
+                </Select>
+
+                {showCustomInput && (
+                  <Input
+                    type="number"
+                    label="Cantidad personalizada"
+                    value={customQuantity}
+                    onChange={(e) => setCustomQuantity(e.target.value)}
+                    min="1"
+                  />
+                )}
+
+                <Select
+                  label="Fracción de acción"
+                  selectedKeys={[selectedFraction]}
+                  onChange={(e) => setSelectedFraction(e.target.value)}
+                >
+                  <SelectItem key="1" value="1">
+                    Acción completa
+                  </SelectItem>
+                  <SelectItem key="0.5" value="0.5">
+                    1/2 Acción
+                  </SelectItem>
+                  <SelectItem key="0.25" value="0.25">
+                    1/4 Acción
+                  </SelectItem>
+                </Select>
+
+                <div className="bg-background p-4 rounded-xl">
+                  <p className="text-textSecondary">Precio total</p>
+                  <p className="text-2xl font-bold text-white">${formatPrice(calculateTotalPrice())}</p>
+                </div>
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={() => setIsPurchaseModalOpen(false)}>
+                Cancelar
+              </Button>
+              <Button color="primary" onPress={handlePurchase}>
+                Comprar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        {/* Success Modal */}
+        <Modal 
+          isOpen={isSuccessModalOpen} 
+          onClose={() => setIsSuccessModalOpen(false)}
+          placement="center"
+        >
+          <ModalContent>
+            <ModalBody className="flex flex-col items-center gap-4 py-8">
+              <img
+                src={emitter?.imagen}
+                alt={emitter?.nombre_empresa}
+                className="w-20 h-20 rounded-full object-cover"
+              />
+              <h2 className="text-xl font-bold text-center">
+                ¡Felicidades! Ahora eres accionista de {emitter?.nombre_empresa}
+              </h2>
+              <div className="bg-background p-4 rounded-xl w-full">
+                <p className="text-textSecondary text-center">Inversión realizada</p>
+                <p className="text-2xl font-bold text-white text-center">
+                  ${formatPrice(calculateTotalPrice())}
+                </p>
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button 
+                color="primary" 
+                className="w-full" 
+                onPress={() => {
+                  setIsSuccessModalOpen(false);
+                  navigate('/home');
+                }}
+              >
+                Ver mi portafolio
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
     </MainLayout>
   );
