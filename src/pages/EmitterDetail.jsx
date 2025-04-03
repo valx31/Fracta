@@ -3,11 +3,10 @@ import { useParams, useNavigate } from 'react-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import MainLayout from '../Layout/MainLayout';
-import { Button } from '@heroui/react';
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem, Input, Tabs, Tab } from '@heroui/react';
 import { ArrowLeftIcon, StarIcon, ArrowTrendingUpIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Select, SelectItem, Input } from '@heroui/react';
 
 export default function EmitterDetail() {
   const { id } = useParams();
@@ -73,7 +72,7 @@ export default function EmitterDetail() {
     if (active && payload && payload.length) {
       return (
         <div className="bg-background p-2 rounded-lg border border-gray-700">
-          <p className="text-white text-sm">{`Precio: $${formatPrice(payload[0].value)}`}</p>
+          <p className="text-white text-xs">{`Precio: $${formatPrice(payload[0].value)}`}</p>
           <p className="text-textSecondary text-xs">{label}</p>
         </div>
       );
@@ -93,10 +92,15 @@ export default function EmitterDetail() {
   const priceChange = calculatePriceChange();
 
   // Prepare data for the chart
-  const chartData = emitter?.precio_actual?.map((price, index) => ({
-    time: index,
-    price: price.precio
-  })) || [];
+  const chartData = emitter?.precio_actual?.map((price) => {
+    const date = new Date(price.fecha);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    return {
+      time: `${day}/${month}`,
+      price: price.precio
+    };
+  }) || [];
 
   // Calculate min and max prices for YAxis domain
   const prices = chartData.map(item => item.price);
@@ -188,26 +192,26 @@ export default function EmitterDetail() {
         </div>
 
         {/* Chart Timeframe Selector */}
-        <div className="flex gap-2 bg-background rounded-xl p-2">
-          {['1m', '5m', '15m', '1h'].map((timeframe) => (
-            <Button
-              key={timeframe}
-              variant={selectedTimeframe === timeframe ? 'solid' : 'light'}
-              color={selectedTimeframe === timeframe ? 'primary' : 'default'}
-              className="flex-1 text-white"
-              onClick={() => setSelectedTimeframe(timeframe)}
-            >
-              {timeframe}
-            </Button>
-          ))}
-        </div>
+        <Tabs 
+          aria-label="Timeframe options"
+          color="primary"
+          fullWidth
+          selectedKey={selectedTimeframe}
+          onSelectionChange={setSelectedTimeframe}
+          className="bg-background rounded-xl p-2"
+        >
+          <Tab key="1m" title="1m" />
+          <Tab key="5m" title="5m" />
+          <Tab key="15m" title="15m" />
+          <Tab key="1h" title="1h" />
+        </Tabs>
 
         {/* Chart */}
         <div className="bg-background rounded-xl p-4 h-64">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={chartData}
-              margin={{ top: 20, right: 50, left: 30, bottom: 20 }}
+              margin={{ top: 10, right: 10, left: 5, bottom: 20 }}
             >
               <CartesianGrid 
                 strokeDasharray="3 3" 
@@ -216,13 +220,16 @@ export default function EmitterDetail() {
               />
               <XAxis 
                 dataKey="time" 
-                tick={{ fill: '#9CA3AF' }}
+                tick={{ fill: '#9CA3AF', fontSize: '12px' }}
                 tickLine={false}
                 axisLine={{ stroke: '#374151' }}
-                hide
+                interval="preserveStartEnd"
+                minTickGap={50}
               />
               <YAxis 
-                tick={{ fill: '#9CA3AF' }}
+                yAxisId="right"
+                orientation="right"
+                tick={{ fill: '#9CA3AF', fontSize: '12px' }}
                 tickLine={false}
                 axisLine={{ stroke: '#374151' }}
                 tickFormatter={(value) => `$${formatPrice(value)}`}
@@ -233,6 +240,7 @@ export default function EmitterDetail() {
               />
               <Tooltip content={<CustomTooltip />} />
               <Line
+                yAxisId="right"
                 type="monotone"
                 dataKey="price"
                 stroke={priceChange?.isPositive ? '#10B981' : priceChange?.isNegative ? '#EF4444' : '#9CA3AF'}
@@ -295,6 +303,7 @@ export default function EmitterDetail() {
                 <Select
                   label="Fracción de acción"
                   selectedKeys={[selectedFraction]}
+                  value={selectedFraction}
                   onChange={(e) => setSelectedFraction(e.target.value)}
                 >
                   <SelectItem key="1" value="1">
