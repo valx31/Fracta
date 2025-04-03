@@ -123,7 +123,8 @@ export default function EmitterDetail() {
     const quantity = showCustomInput ? parseInt(customQuantity) || 0 : parseInt(selectedQuantity);
     const fraction = parseFloat(selectedFraction);
     const price = lastPrice?.precio || 0;
-    return (quantity * fraction * price).toFixed(2);
+    const total = quantity * fraction * price;
+    return formatPrice(total);
   };
 
   const handlePurchase = () => {
@@ -319,7 +320,7 @@ export default function EmitterDetail() {
 
                 <div className="bg-background p-4 rounded-xl">
                   <p className="text-textSecondary">Precio total</p>
-                  <p className="text-2xl font-bold text-white">${formatPrice(calculateTotalPrice())}</p>
+                  <p className="text-2xl font-bold text-white">${calculateTotalPrice()}</p>
                 </div>
               </div>
             </ModalBody>
@@ -353,7 +354,7 @@ export default function EmitterDetail() {
               <div className="bg-background p-4 rounded-xl w-full">
                 <p className="text-textSecondary text-center">Inversión realizada</p>
                 <p className="text-2xl font-bold text-white text-center">
-                  ${formatPrice(calculateTotalPrice())}
+                  ${calculateTotalPrice()}
                 </p>
               </div>
             </ModalBody>

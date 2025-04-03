@@ -77,7 +77,7 @@ export default function Emitters() {
             placeholder="Buscar por nombre..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-background rounded-xl"
+            fullWidth
             startContent={
               <MagnifyingGlassIcon className="w-5 h-5 text-textSecondary" />
             }
