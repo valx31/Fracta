@@ -69,7 +69,7 @@ export default function Emitters() {
   return (
     <MainLayout>
       <main className="flex flex-col gap-6">
-        <h1 className="text-2xl font-bold text-white">Acciones Disponibles</h1>
+        <h1 className="text-2xl text-center font-bold">Acciones Disponibles</h1>
         
         <div className="relative">
           <Input
