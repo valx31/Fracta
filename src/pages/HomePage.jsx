@@ -5,6 +5,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
   ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
 } from "@heroicons/react/24/outline";
 import CardActivityRecent from "../components/CardActivityRecent";
 import { useNavigate } from "react-router";
@@ -48,15 +49,26 @@ export default function HomePage() {
           </div>
           <div className="bg-background rounded-3xl flex flex-col gap-4 justify-center items-center w-full p-5">
             <p className="bold-16 text-white">¿En qué quieres invertir?</p>
-            <Button
-              className="bg-primary rounded-full w-full py-7"
-              startContent={
-                <ArrowTrendingUpIcon className="w-6 h-6 text-secondary" />
-              }
-              onClick={() => navigate('/emitters')}
-            >
-              <p className="regular-16 text-secondary">Acciones</p>
-            </Button>
+            <div className="flex flex-col gap-4 w-full">
+              <Button
+                className="bg-primary rounded-full w-full py-7"
+                startContent={
+                  <ArrowTrendingUpIcon className="w-6 h-6 text-secondary" />
+                }
+                onPress={() => navigate('/emitters')}
+              >
+                <p className="regular-16 text-secondary">Acciones</p>
+              </Button>
+              <Button
+                className="bg-secondary rounded-full w-full py-7"
+                startContent={
+                  <ArrowTrendingDownIcon className="w-6 h-6 text-primary" />
+                }
+                onPress={() => navigate('/sell-shares')}
+              >
+                <p className="regular-16 text-primary">Vender acciones</p>
+              </Button>
+            </div>
           </div>
         </main>
       </MainLayout>
