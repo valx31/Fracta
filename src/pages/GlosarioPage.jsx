@@ -19,8 +19,16 @@ export default function GlosarioPage() {
           id: doc.id,
           ...doc.data(),
         }));
-        setGlosarioItems(glosarioList);
-        setFilteredItems(glosarioList);
+        
+        // Sort items alphabetically by title
+        const sortedList = [...glosarioList].sort((a, b) => {
+          const titleA = a.titulo?.toLowerCase() || '';
+          const titleB = b.titulo?.toLowerCase() || '';
+          return titleA.localeCompare(titleB);
+        });
+        
+        setGlosarioItems(sortedList);
+        setFilteredItems(sortedList);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching glosario data:", error);
