@@ -24,7 +24,6 @@ export default function HomePage() {
               <p className="bold-16">Marzo 29, 2025</p>
             </div>
             <div className="flex flex-col gap-2 px-7 pt-14 pb-7">
-              <h6 className="regular-16 text-white">Total invertido</h6>
               <p className="font-bold text-[37px] text-white">$50.000,04</p>
             </div>
           </section>

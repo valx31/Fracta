@@ -14,7 +14,7 @@
     "@heroui/react": "^2.7.2",
     "firebase": "^11.5.0",
     "fracta_fintech": "file:",
-    "framer-motion": "^12.4.7",
+    "framer-motion": "^12.11.3",
     "install": "^0.13.0",
     "npm": "^11.2.0",
     "react": "^19.0.0",
