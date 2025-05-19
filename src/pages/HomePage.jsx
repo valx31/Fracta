@@ -75,9 +75,9 @@ export default function HomePage() {
         <div className="flex flex-col gap-4 justify-between rounded-3xl py-6 px-7 shadow-sm">
           <h6 className="bold-16 mb-3">Actividad Reciente</h6>
           <div className="flex flex-col gap-4">
-            <CardActivityRecent />
-            <CardActivityRecent />
-            <CardActivityRecent />
+            <CardActivityRecent title="Google" amount="-$100.000" />
+            <CardActivityRecent title="Google" amount="-$100.000" />
+            <CardActivityRecent title="Google" amount="+$50.000" />
           </div>
         </div>
       </section>

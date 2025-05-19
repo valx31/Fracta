@@ -1,15 +1,15 @@
-export default function CardActivityRecent() {
+export default function CardActivityRecent({ title, amount }) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         <GoogleSVG />
         <div>
-          <p className="bold-16">Google</p>
-          <p className="regular-14 text-textSecondary">Today, 16:32</p>
+          <p className="bold-16">{title}</p>
+          <p className="regular-14 text-textSecondary">Hoy, 16:32</p>
         </div>
       </div>
       <div>
-        <p className="bold-16">-$100.000</p>
+        <p className="bold-16">{amount}</p>
         <p className="regular-14 text-textSecondary">Transferencia</p>
       </div>
     </div>

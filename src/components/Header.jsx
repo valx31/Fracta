@@ -22,12 +22,26 @@ export default function Header() {
           </h6>
         </div>
         <div className="z-10">
-          <Avatar
-            src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-            isBordered
-            className="cursor-pointer"
+          <button
             onClick={toggleMenu}
-          />
+            className="p-1 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-gray-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
         </div>
       </header>
 
@@ -49,7 +63,17 @@ export default function Header() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-4 flex flex-col gap-4">
-                <div className="flex justify-end">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <Avatar
+                      src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                      isBordered
+                    />
+                    <div>
+                      <p className="semibold-16">Juan Perez</p>
+                      <p className="regular-12 text-textSecondary">Usuario</p>
+                    </div>
+                  </div>
                   <button
                     onClick={toggleMenu}
                     className="text-gray-500 hover:text-gray-700"
@@ -70,6 +94,7 @@ export default function Header() {
                     </svg>
                   </button>
                 </div>
+                <div className="border-t border-gray-200 my-2"></div>
 
                 <nav className="flex flex-col gap-3">
                   <NavLink
@@ -94,7 +119,6 @@ export default function Header() {
                     Configuración
                   </a>
                   <a
-                    href="/logout"
                     className="p-2 hover:bg-gray-100 rounded-md transition-colors text-red-500"
                   >
                     Cerrar Sesión
