@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { Accordion, AccordionItem, Input } from "@heroui/react";
+import { Accordion, AccordionItem, Input, Button } from "@heroui/react";
 import MainLayout from "../Layout/MainLayout";
+import { useNavigate } from "react-router";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 export default function GlosarioPage() {
   const [glosarioItems, setGlosarioItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGlosario = async () => {
@@ -58,7 +61,16 @@ export default function GlosarioPage() {
     <MainLayout>
       <main className="">
         <div className="flex flex-col gap-4 mb-6">
-          <h1 className="semibold-24">Glosario</h1>
+        <div className="flex items-center justify-between">
+          <Button
+            isIconOnly
+            variant="light"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeftIcon className="w-6 h-6" />
+          </Button>
+          <h1 className="text-xl font-bold">Glosario</h1>
+        </div>
           <Input
             type="text"
             placeholder="Buscar término..."

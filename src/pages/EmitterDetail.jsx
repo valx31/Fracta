@@ -84,7 +84,9 @@ export default function EmitterDetail() {
   if (loading) {
     return (
       <MainLayout>
-        <div className="text-white">Cargando...</div>
+        <div className="flex justify-center items-center h-screen -mt-20">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+        </div>
       </MainLayout>
     );
   }
