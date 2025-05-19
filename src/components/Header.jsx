@@ -119,6 +119,7 @@ export default function Header() {
                     Configuración
                   </a>
                   <a
+                    href="/login"
                     className="p-2 hover:bg-gray-100 rounded-md transition-colors text-red-500"
                   >
                     Cerrar Sesión
