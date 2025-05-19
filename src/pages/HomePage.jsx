@@ -2,12 +2,12 @@ import MainLayout from "../Layout/MainLayout";
 import Header from "../components/Header";
 import { Button } from "@heroui/react";
 import {
-  ArrowLeftStartOnRectangleIcon,
-  ArrowRightStartOnRectangleIcon,
   ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
+  ArrowTrendingDownIcon
 } from "@heroicons/react/24/outline";
 import CardActivityRecent from "../components/CardActivityRecent";
+import DepositFlow from "../components/DepositFlow";
+import WithdrawFlow from "../components/WithdrawFlow";
 import { useNavigate } from "react-router";
 
 export default function HomePage() {
@@ -29,22 +29,8 @@ export default function HomePage() {
           </section>
 
           <div className="flex items-center justify-center gap-4">
-            <Button
-              className="bg-secondary rounded-full w-full py-7"
-              startContent={
-                <ArrowRightStartOnRectangleIcon className="w-6 h-6 text-primary" />
-              }
-            >
-              <p className="regular-16 text-primary">Depositar</p>
-            </Button>
-            <Button
-              className="bg-primary rounded-full w-full py-7"
-              startContent={
-                <ArrowLeftStartOnRectangleIcon className="w-6 h-6 text-secondary" />
-              }
-            >
-              <p className="regular-16 text-secondary">Retirar</p>
-            </Button>
+            <DepositFlow />
+            <WithdrawFlow />
           </div>
           <div className="bg-background rounded-3xl flex flex-col gap-4 justify-center items-center w-full p-5">
             <p className="bold-16 text-white">¿En qué quieres invertir?</p>
