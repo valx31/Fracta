@@ -92,6 +92,11 @@ export default function WithdrawFlow() {
               <p className="text-sm text-textSecondary">
                 Monto máximo de retiro: {formatCurrency(maxWithdrawal)}
               </p>
+              {withdrawAmount && parseFloat(withdrawAmount) > balance && (
+                <p className="text-sm text-red-500 mt-1">
+                  El monto excede tu saldo disponible de {formatCurrency(balance)}
+                </p>
+              )}
             </div>
           </ModalBody>
           <ModalFooter>
@@ -105,7 +110,7 @@ export default function WithdrawFlow() {
             <Button
               color="primary"
               onPress={handleWithdraw}
-              isDisabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) <= maxWithdrawal}
+              isDisabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) > balance}
             >
               Continuar
             </Button>
